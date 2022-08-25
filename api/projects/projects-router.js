@@ -47,14 +47,17 @@ router.get("/:id", (req, res) => {
       });
   })
 
-  router.put("/:id", (req, res)=>{
+  router.put("/:id", (req, res, next)=>{
+    if  (!req.body.name || !req.body.description || !req.body.hasOwnProperty("completed")) {
+        console.log("NAME DESCRIPTION NOT INCLUDED")
+        res.statusCode = 400
+        next() 
+    } else {
     update(req.params.id, req.body)
     .then((response) => {
        
         if(response){
-            if  (!req.body.name || !req.body.description ) {
-                throw new Error ("Name, Descpription, Completed are REQ")
-            }
+            
             res.status(200).json(response);
         } else {
             throw new Error("No Project Found with that ID")
@@ -64,8 +67,9 @@ router.get("/:id", (req, res) => {
       .catch((err) => {
         console.log(err);
         const status = !req.body.name || !req.body.description ? 400 : 500
-        res.status(404).json({message: err.message});
-      });
+        res.status(400).json({message: err.message});
+      })
+    }
   })
     
   router.delete("/:id", (req, res) => {

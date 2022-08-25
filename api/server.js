@@ -1,6 +1,8 @@
 const express = require('express');
 const server = express();
 const projectRoutes = require('./projects/projects-router.js')
+const actionRoutes = require('./actions/actions-router.js')
+const handleErrors = require('./actions/actions-middlware')
 
 server.use(express.json())
 
@@ -9,6 +11,10 @@ server.get('/', (req, res)=>{
 })
 
 server.use('/api/projects', projectRoutes)
+server.use('/api/actions', actionRoutes)
+
+server.use(handleErrors)
+
 
 
 
