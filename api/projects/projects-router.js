@@ -50,8 +50,12 @@ router.get("/:id", (req, res) => {
   router.put("/:id", (req, res, next)=>{
     if  (!req.body.name || !req.body.description || !req.body.hasOwnProperty("completed")) {
         console.log("NAME DESCRIPTION NOT INCLUDED")
-        res.statusCode = 400
-        next() 
+        res.status(400).json({
+          message: "Name, Description, Completed Needed"
+        })
+
+        // res.statusCode = 400
+        // next() 
     } else {
     update(req.params.id, req.body)
     .then((response) => {
